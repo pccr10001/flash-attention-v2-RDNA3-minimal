@@ -13,7 +13,7 @@ else:
     import torch.utils.cpp_extension
 
 
-os.environ["PYTORCH_ROCM_ARCH"] = "gfx1100" #;gfx1101;gfx1102;gfx1103"
+os.environ["PYTORCH_ROCM_ARCH"] = "gfx1151;gfx1100" #;gfx1101;gfx1102;gfx1103"
 src_Path = os.path.split(os.path.realpath(__file__))[0]
 build_path = os.path.join(src_Path, "build")
 os.makedirs(build_path, exist_ok=True)
@@ -27,15 +27,12 @@ flash_attn_wmma = torch.utils.cpp_extension.load(
         "-Ofast",
         "-save-temps",
         "-DROCWMMA_ARCH_GFX1100=1",
-        "-DROCWMMA_ARCH_GFX1101=1",
-        "-DROCWMMA_ARCH_GFX1102=1",
-        "-DROCWMMA_ARCH_GFX1103=1", 
+        "-DROCWMMA_ARCH_GFX1151=1", 
         "-DROCWMMA_ARCH_GFX11=1",
-        "-DROCWMMA_WAVE32_MODE=1",
-        "-DROCWMMA_BLOCK_DIM_16_SUPPORTED=1",
         "-mcumode",
         "-ffast-math",
         "-fgpu-flush-denormals-to-zero",
+        "-U__HIP_NO_HALF_CONVERSIONS__",
     ],
     build_directory=build_path,
 )
